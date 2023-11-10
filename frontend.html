@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Websocket Test Client</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+            let socket;
+            let open = false;
+
+            // function to connect to wesocket
+            function connect() {
+                // connect to websocket
+                socket = new WebSocket("ws://localhost:8080");
+
+                // event when socket was connected successfully
+                socket.onopen = function () {
+                    console.log('Websocket connected');
+                    open = true; // save that socket is connected
+                };
+
+                // event when a message is received
+                socket.onmessage = function (event) {
+                    console.log(`Received Data ${event.data}`);
+                    // add message to HTML
+                    const el = document.createElement('p');
+                    el.innerHTML = event.data;
+                    document.querySelector('#out').appendChild(el);
+                };
+
+                // event when socket is closed or connection is lost
+                socket.onclose = function (event) {
+                    if (event.wasClean) {
+                        console.log('Websocket closed');
+                    } else {
+                        console.log('Websocket died');
+                    }
+                    open = false; // save that socket is not connected anymore
+
+                    // automatically try to reconnect afer one second
+                    window.setTimeout(() => {
+                        connect();
+                    }, 1000);
+                };
+
+                // event when an error occurrs, just forward it to console.error function
+                socket.onerror = console.error;
+            }
+
+            connect();
+
+            // function to send a message
+            function send() {
+                if (open) {
+                    socket.send(document.querySelector('#in').value);
+                }
+            }
+        </script>
+        <div>
+            <input type="text" id="in" style="width: 500px;" />
+            <button type="button" onclick="send();">Send</button>
+        </div>
+        <div>
+            <h3>Received:</h3>
+            <div id="out"></div>
+        </div>
+    </body>
+</html>

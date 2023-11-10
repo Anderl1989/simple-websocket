@@ -1,0 +1,20 @@
+{
+  "name": "simple-websocket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend.js",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node backend.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-personal:Anderl1989/simple-websocket.git"
+  },
+  "author": "Andreas Kasch",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.14.2"
+  }
+}
